@@ -4,14 +4,13 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import toast from "react-hot-toast";
 import Avatar from "react-avatar";
 import { Controlled as CodeMirror } from "react-codemirror2";
+import Chat from "./Chat";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/javascript/javascript";
 import "codemirror/mode/python/python";
 import "codemirror/mode/clike/clike";
 import "codemirror/theme/dracula.css";
-import io from "socket.io-client";
-
-const socket = io("http://localhost:4000");
+import socket from './Socket';
 const Editor = () => {
   const location = useLocation();
   const { username, roomid } = location.state || {};
@@ -31,6 +30,7 @@ const Editor = () => {
 
   useEffect(() => {
     socket.on("user-joined", (data) => {
+      console.log('User joined:', data);
       setuser((prevuser) => [...prevuser, data]);
       toast.success(`${data.username} joined the room `);
     });
@@ -240,7 +240,8 @@ const Editor = () => {
           Leave Room
         </button>
       </div>
-
+      {/* Chat app */}
+      <Chat />
       {/* Main Editor Section */}
       <div className="w-3/4 p-5">
         <div className="mb-4">

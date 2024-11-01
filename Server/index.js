@@ -63,6 +63,9 @@ io.on("connection", (socket) => {
   socket.on("change-language", ({ language, roomid }) => {
     socket.to(roomid).emit("languagechanged", language);
   });
+  socket.on("message",({message,username,roomid})=>{
+    socket.to(roomid).emit("new-message",{message,username})
+  })
 });
 
 server.listen(Port, () => {

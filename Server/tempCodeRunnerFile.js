@@ -1,3 +1,3 @@
-  socket.on("output-change",({output,roomid})=>{
-    socket.to(roomid).emit("receive-output",output)
+  socket.on("message",({message,username,roomid})=>{
+    io.to(roomid).emit("new-message",{message,username})
   })
