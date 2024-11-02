@@ -10,7 +10,8 @@ import "codemirror/mode/javascript/javascript";
 import "codemirror/mode/python/python";
 import "codemirror/mode/clike/clike";
 import "codemirror/theme/dracula.css";
-import socket from './Socket';
+import socket from "./Socket";
+import Downloadbtn from "./Downloadbtn";
 const Editor = () => {
   const location = useLocation();
   const { username, roomid } = location.state || {};
@@ -30,7 +31,7 @@ const Editor = () => {
 
   useEffect(() => {
     socket.on("user-joined", (data) => {
-      console.log('User joined:', data);
+      console.log("User joined:", data);
       setuser((prevuser) => [...prevuser, data]);
       toast.success(`${data.username} joined the room `);
     });
@@ -129,7 +130,7 @@ const Editor = () => {
     const options = {
       method: "POST",
       headers: {
-        "x-rapidapi-key": "YOUR_API_KEY",
+        "x-rapidapi-key": "591092f4a8msh54a08da75312232p1dea0fjsn93e494dca88e",
         "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
         "Content-Type": "application/json",
       },
@@ -165,7 +166,7 @@ const Editor = () => {
     const options = {
       method: "GET",
       headers: {
-        "x-rapidapi-key": "YOUR_API_KEY",
+        "x-rapidapi-key": "591092f4a8msh54a08da75312232p1dea0fjsn93e494dca88e",
         "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
       },
     };
@@ -207,90 +208,107 @@ const Editor = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#1c1e29] text-white">
+    <div className="flex min-h-screen bg-[#121212] text-white">
       {/* Sidebar - User Info and Controls */}
-      <div className="w-1/4 p-5 flex flex-col items-center border-r border-gray-700">
+      <aside className="w-1/4 p-6 flex flex-col items-center border-r border-gray-700 bg-[#1e1e2f]">
         <img
           src="/Images/codecast.png"
           alt="Codecast Logo"
-          className="mb-6 w-24"
+          className="mb-6 w-28 transition-transform transform hover:scale-105 duration-300"
         />
-        <h2 className="text-xl font-semibold mb-4">Members</h2>
-        {user.map((user, index) => (
-          <div key={index} className="mb-2">
-            <Avatar
-              name={user.username}
-              size={100}
-              maxInitials={2}
-              round={true}
-            />
-            <h3 className="text-lg font-medium">{user.username}</h3>
-          </div>
-        ))}
-        <CopyToClipboard text={roomid} onCopy={copyid}>
-          <button className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600 transition mb-4">
-            Copy Room ID
-          </button>
-        </CopyToClipboard>
+        <h2 className="text-xl font-semibold mb-6 tracking-wide">Members</h2>
+        <div className="space-y-4">
+          {user.map((user, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <Avatar
+                name={user.username}
+                size={70}
+                maxInitials={2}
+                round={true}
+                className="shadow-lg"
+              />
+              <h3 className="text-lg font-medium mt-2">{user.username}</h3>
+            </div>
+          ))}
+        </div>
+        <div className="mt-auto space-y-4 w-full">
+          <CopyToClipboard text={roomid} onCopy={copyid}>
+            <button className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md transition duration-200">
+              Copy Room ID
+            </button>
+          </CopyToClipboard>
 
-        <button
-          onClick={Leaveroom}
-          className="bg-red-500 px-4 py-2 rounded hover:bg-red-600 transition"
-        >
-          Leave Room
-        </button>
-      </div>
-      {/* Chat app */}
-      <Chat />
-      {/* Main Editor Section */}
-      <div className="w-3/4 p-5">
-        <div className="mb-4">
-          <label htmlFor="language" className="block mb-2 font-medium">
-            Choose Language
-          </label>
-          <select
-            id="language"
-            onChange={(e) => setLanguage(e.target.value)}
-            value={language}
-            className="w-full bg-[#2e2f3e] text-white p-2 rounded outline-none border border-gray-700"
+          <button
+            onClick={Leaveroom}
+            className="w-full bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md transition duration-200"
           >
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="text/x-csrc">C</option>
-            <option value="text/x-c++src">C++</option>
-            <option value="text/typescript">TypeScript</option>
-          </select>
+            Leave Room
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Editor Section */}
+      <main className="flex-1 p-6 space-y-4">
+        <div className="flex justify-between items-center">
+          <div>
+            <label
+              htmlFor="language"
+              className="block mb-1 font-medium text-gray-300"
+            >
+              Choose Language
+            </label>
+            <select
+              id="language"
+              onChange={(e) => setLanguage(e.target.value)}
+              value={language}
+              className="bg-[#1e1e2f] text-white p-2 rounded-md border border-gray-700 focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="javascript">JavaScript</option>
+              <option value="python">Python</option>
+              <option value="text/x-csrc">C</option>
+              <option value="text/x-c++src">C++</option>
+              <option value="text/typescript">TypeScript</option>
+            </select>
+          </div>
+          <Downloadbtn code={code} language={language} />
         </div>
 
-        <CodeMirror
-          value={code}
-          onBeforeChange={(editor, data, value) => {
-            setCode(value);
-            socket.emit("code-change", { roomid, code: value });
-          }}
-          options={{
-            theme: "dracula",
-            lineNumbers: true,
-            mode: language,
-            extraKeys: { "Ctrl-Space": "autocomplete" },
-            matchBrackets: true,
-          }}
-          className="border border-gray-700 rounded mb-4"
-        />
+        <div className="border border-gray-700 rounded-lg overflow-hidden shadow-lg">
+          <CodeMirror
+            value={code}
+            onBeforeChange={(editor, data, value) => {
+              setCode(value);
+              socket.emit("code-change", { roomid, code: value });
+            }}
+            options={{
+              theme: "dracula",
+              lineNumbers: true,
+              mode: language,
+              extraKeys: { "Ctrl-Space": "autocomplete" },
+              matchBrackets: true,
+            }}
+            className="rounded-lg"
+          />
+        </div>
+
         <button
           onClick={handleRunClick}
-          className="bg-green-500 px-4 py-2 rounded hover:bg-green-600 transition mb-4"
+          className="bg-green-500 hover:bg-green-600 px-6 py-2 rounded-lg font-medium transition duration-200 shadow-lg"
         >
           {loading ? "Running" : coderun}
         </button>
 
-        <div className="bg-[#2e2f3e] p-4 rounded mt-4">
+        <div className="bg-[#1e1e2f] p-4 rounded-lg mt-4 shadow-lg">
           <h3 className="text-lg font-semibold mb-2">Output:</h3>
-          <pre>{output}</pre>
+          <pre className="whitespace-pre-wrap text-gray-300 bg-gray-800 border border-gray-600 rounded-lg p-4 shadow-md overflow-auto">
+            {output}
+          </pre>
         </div>
-      </div>
+      </main>
+
+      {/* Chat Component */}
+      <Chat />
     </div>
   );
 };
-
 export default Editor;
