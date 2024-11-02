@@ -22,7 +22,8 @@ const Editor = () => {
   const [loading, setLoading] = useState(false);
   const [user, setuser] = useState([]);
   const [coderun, setcoderun] = useState("Run");
-
+  const apikey=process.env.REACT_APP_API_KEY
+  
   useEffect(() => {
     if (username && roomid) {
       socket.emit("join-room", { username, roomid });
@@ -130,7 +131,7 @@ const Editor = () => {
     const options = {
       method: "POST",
       headers: {
-        "x-rapidapi-key": "YOUR_API_KEY",
+        "x-rapidapi-key": apikey,
         "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
         "Content-Type": "application/json",
       },
@@ -166,7 +167,7 @@ const Editor = () => {
     const options = {
       method: "GET",
       headers: {
-        "x-rapidapi-key": "YOUR_API_KEY",
+        "x-rapidapi-key":apikey,
         "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
       },
     };
