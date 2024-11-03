@@ -1,4 +1,5 @@
-# Remote Code Collaboration Too
+
+# Remote Code Collaboration Tool
 Welcome to the **Remote Code Collaboration Tool**! This web application enables multiple users to collaborate in real-time on coding projects. Built with modern technologies, this tool is designed to facilitate seamless code editing, execution, and sharing among developers and students.
 
 ## Table of Contents
@@ -17,6 +18,8 @@ Welcome to the **Remote Code Collaboration Tool**! This web application enables 
 - **Code Execution**: Execute code snippets and display the output instantly.
 - **User Management**: Join rooms using a unique Room ID and username.
 - **Member Notifications**: Get notified when users join or leave the room.
+- **Chat Feature**: Send and receive real-time messages within a room.
+- **Code Save**: Save the current code in the editor to download and revisit later.
 
 ## Technologies Used
 
@@ -77,6 +80,8 @@ To run this project locally, follow these steps:
 - **Join a Room**: Enter a Room ID and your username, then click "Join" to enter the coding room.
 - **Collaborate**: Start coding! You can see real-time updates as your collaborators make changes.
 - **Execute Code**: Use the "Run" button to execute your code and see the output in the terminal.
+- **Chat**: Send and receive real-time messages with other users in the room.
+- **Save Code**: Use the "Save" button to download the code written in the editor for future reference.
 
 ## Contributing
 
@@ -98,6 +103,5 @@ Contributions are welcome! If you want to improve the project, please follow the
 ---
 
 Thank you for checking out the **Remote Code Collaboration Tool**! Feel free to reach out if you have any questions or suggestions. Happy coding!
-```
 
-
+---
