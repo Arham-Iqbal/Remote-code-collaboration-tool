@@ -1,12 +1,13 @@
 const express = require("express");
+require('dotenv').config();
 const app = express();
-const Port = 4000;
+const Port = process.env.PORT;
 const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "remote-code-collaboration-tool-lcvt.vercel.app",
     methods: ["GET", "POST"],
   },
 });
