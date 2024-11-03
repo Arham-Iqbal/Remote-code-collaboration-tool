@@ -7,7 +7,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "remote-code-collaboration-tool-lcvt.vercel.app",
+    origin: "https://remote-code-collaboration-tool-lcvt.vercel.app",
     methods: ["GET", "POST"],
   },
 });
