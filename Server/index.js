@@ -7,7 +7,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "remote-code-collaboration-tool-lcvt.vercel.app",
+    origin: "https://remote-code-collaboration-tool-lcvt.vercel.app",
     methods: ["GET", "POST"],
   },
 });
@@ -67,6 +67,13 @@ io.on("connection", (socket) => {
   socket.on("message",({message,username,roomid})=>{
     socket.to(roomid).emit("new-message",{message,username})
   })
+});
+// Middleware to serve static files from the React app
+app.use(express.static(path.join(__dirname, 'Client/build')));
+
+// Route all other requests to index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Client/build', 'index.html'));
 });
 
 server.listen(Port, () => {
